@@ -1,5 +1,6 @@
 package sg.nus.iss.shoppingcart;
 
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -7,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import sg.nus.iss.shoppingcart.controller.UserController;
 import sg.nus.iss.shoppingcart.enums.ResponseStatus;
@@ -71,7 +73,8 @@ public class UserControllerTest {
         Response<UserDTO> expectedResponse = new Response<>(ResponseStatus.SUCCESS, "Login successful", userDTO);
 
         when(userInterface.loginUser(user.getUsername(), user.getPassword())).thenReturn(expectedResponse);
-        ResponseEntity<Response<UserDTO>> response = userController.loginUser(user);
+        HttpSession mockSession = new MockHttpSession();
+        ResponseEntity<Response<UserDTO>> response = userController.loginUser(user, mockSession);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -81,9 +84,9 @@ public class UserControllerTest {
     @Test
     public void testLoginUser_Exception() {
         User user = new User();
-
+        HttpSession mockSession = new MockHttpSession();
         when(userInterface.loginUser(user.getUsername(), user.getPassword())).thenThrow(new RuntimeException("Login failed"));
-        ResponseEntity<Response<UserDTO>> response = userController.loginUser(user);
+        ResponseEntity<Response<UserDTO>> response = userController.loginUser(user,mockSession);
 
         assertEquals(500, response.getStatusCodeValue());
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());

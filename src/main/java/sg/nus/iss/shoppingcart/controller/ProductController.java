@@ -1,38 +1,24 @@
 package sg.nus.iss.shoppingcart.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sg.nus.iss.shoppingcart.interfacemethods.ProductInterface;
 import sg.nus.iss.shoppingcart.model.Product;
-import sg.nus.iss.shoppingcart.service.ProductImplementation;
 
 import java.io.IOException;
 import java.util.List;
 
-/**
- * @ClassName ProductController
- * @Description Controller for handling product-related operations.
- */
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-
     private final ProductInterface productService;
 
-    /**
-     * Constructor for ProductController.
-     *
-     * @param productInterfaceImpl the implementation of ProductInterface
-     */
-    public ProductController(ProductImplementation productInterfaceImpl) {
-        this.productService = productInterfaceImpl;
+    public ProductController(ProductInterface productService) {
+        this.productService = productService;
     }
 
     /**
@@ -91,9 +77,12 @@ public class ProductController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addProduct(@RequestPart Product product, @RequestPart("image") MultipartFile image) {
-        productService.createProduct(product, image);
-        System.out.println(image);
-        return new ResponseEntity<>("successfully", HttpStatus.CREATED);
+        try {
+            productService.createProduct(product, image);
+            return new ResponseEntity<>("Product added successfully", HttpStatus.CREATED);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Failed to add product: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -114,17 +103,15 @@ public class ProductController {
      * @param response the HTTP response
      * @throws IOException if an I/O error occurs
      */
-    @PostMapping(value = "/product/update/{id}")
-    public void updateProduct(@PathVariable("id") int id, Product product, HttpServletResponse response) throws IOException {
+    @PostMapping(value = "/update/{id}")
+    public void updateProduct(@PathVariable("id") Integer id, Product product, HttpServletResponse response) throws IOException {
         Product existingProduct = productService.findProductById(id);
-
         if (existingProduct != null) {
             existingProduct.setName(product.getName());
             existingProduct.setDescription(product.getDescription());
             existingProduct.setPrice(product.getPrice());
             existingProduct.setStock(product.getStock());
             existingProduct.setStatus(product.getStatus());
-
             productService.updateProduct(existingProduct);
         }
         response.sendRedirect("/all/products");
@@ -137,8 +124,8 @@ public class ProductController {
      * @param response the HTTP response
      * @throws IOException if an I/O error occurs
      */
-    @DeleteMapping(value = "/product/delete/{id}")
-    public void deleteProduct(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
+    @DeleteMapping(value = "/delete/{id}")
+    public void deleteProduct(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
         productService.deleteProduct(id);
         response.sendRedirect("/all/products");
     }

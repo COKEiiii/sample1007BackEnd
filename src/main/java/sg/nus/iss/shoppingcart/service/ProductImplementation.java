@@ -17,24 +17,20 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-/**
- * Service implementation for handling product-related operations.
- */
 @Service
 @Transactional
 public class ProductImplementation implements ProductInterface {
-
     private final ProductRepository productRepository;
 
-    /**
-     * Constructor for ProductImplementation.
-     *
-     * @param productRepository the product repository
-     */
     public ProductImplementation(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
+    // 添加getProductById方法以匹配接口
+    @Override
+    public Product getProductById(Integer id) {
+        return findProductById(id);
+    }
     /**
      * Finds a product by its ID.
      *

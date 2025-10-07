@@ -3,6 +3,7 @@ package sg.nus.iss.shoppingcart.service;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import sg.nus.iss.shoppingcart.interfacemethods.CartInterface;
+import sg.nus.iss.shoppingcart.model.Cart;
 import sg.nus.iss.shoppingcart.model.CartItem;
 import sg.nus.iss.shoppingcart.model.DTO.CartItemDTO;
 import sg.nus.iss.shoppingcart.model.Product;
@@ -38,6 +39,11 @@ public class CartImplementation implements CartInterface {
     public CartImplementation(CartItemRepository cartItemRepository, ProductRepository productRepository) {
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
+    }
+
+    @Override
+    public Cart addProductToCart(Long userId, Long productId, Long quantity) {
+        return null;
     }
 
     @Override

@@ -90,23 +90,23 @@ public class UserController {
     //     }
     // }
     //
-    // @GetMapping("/profile/{id}")
-    // public ResponseEntity<Response<User>> displayUser(@PathVariable Long id) {
-    //     try {
-    //         Response<User> response = userInterface.getUserProfile(id);
-    //         return ResponseEntity.status(response.getStatusCode()).body(response);
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(500).body(new Response<>(ResponseStatus.INTERNAL_SERVER_ERROR, "Failed to get information：" + e.getMessage(), null));
-    //     }
-    // }
+     @GetMapping("/profile/{id}")
+     public ResponseEntity<Response<User>> displayUser(@PathVariable Long id) {
+         try {
+             Response<User> response = userInterface.getUserProfile(id);
+             return ResponseEntity.status(response.getStatusCode()).body(response);
+         } catch (Exception e) {
+             return ResponseEntity.status(500).body(new Response<>(ResponseStatus.INTERNAL_SERVER_ERROR, "Failed to get information：" + e.getMessage(), null));
+         }
+     }
     //
-    // @GetMapping("/search")
-    // public ResponseEntity<Response<List<User>>> searchUserByKeyword(@RequestParam("keyword") String keyword) {
-    //     try {
-    //         Response<List<User>> response = userInterface.searchUserByKeyword(keyword);
-    //         return ResponseEntity.status(response.getStatusCode()).body(response);
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(500).body(new Response<>(ResponseStatus.INTERNAL_SERVER_ERROR, "Search No one：" + e.getMessage(), null));
-    //     }
-    // }
+     @GetMapping("/search")
+     public ResponseEntity<Response<List<User>>> searchUserByKeyword(@RequestParam("keyword") String keyword) {
+         try {
+             Response<List<User>> response = userInterface.searchUserByKeyword(keyword);
+             return ResponseEntity.status(response.getStatusCode()).body(response);
+         } catch (Exception e) {
+             return ResponseEntity.status(500).body(new Response<>(ResponseStatus.INTERNAL_SERVER_ERROR, "Search No one：" + e.getMessage(), null));
+         }
+     }
 }
