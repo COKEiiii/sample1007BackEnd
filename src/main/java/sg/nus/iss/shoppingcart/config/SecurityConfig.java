@@ -19,34 +19,40 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // 添加CORS配置
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        // 修正路径匹配，移除/api前缀或添加/users路径
                         .requestMatchers(
-                                "/users/register",    // 添加这个路径
-                                "/users/login",       // 添加这个路径
+                                // 用户认证相关
+                                "/users/register",
+                                "/users/login",
+                                "/users/session",
+                                "/users/logout",
                                 "/api/users/register",
                                 "/api/users/login",
+                                // 产品相关 - 允许小写和大写路径
                                 "/api/products/**",
+                                "/product/**",   // 小写路径
+                                "/Product/**",   // 添加大写路径以匹配后端端点
+                                // 其他
                                 "/api/categories/**",
-                                "/images/**"
+                                "/images/**",
+                                "/css/**",
+                                "/js/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
-
         return http.build();
     }
 
-    // 添加CORS配置
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // 或在生产环境中指定具体域名
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
-
+        configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

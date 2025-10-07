@@ -16,6 +16,7 @@ import sg.nus.iss.shoppingcart.model.Product;
 import sg.nus.iss.shoppingcart.service.CartImplementation;
 import sg.nus.iss.shoppingcart.validator.QuantityValidator;
 
+import jakarta.servlet.http.HttpSession;
 /**
  * @ClassName CartController
  * @Description Controller for handling shopping cart related operations.
