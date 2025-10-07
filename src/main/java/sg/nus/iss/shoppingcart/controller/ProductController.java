@@ -21,26 +21,14 @@ public class ProductController {
         this.productService = productService;
     }
 
-    /**
-     * Redirects to the page displaying all products.
-     *
-     * @param response the HTTP response
-     * @throws IOException if an I/O error occurs
-     */
     @GetMapping("/")
     public void getSearchPage(HttpServletResponse response) throws IOException {
         response.sendRedirect("/all/product");
     }
 
-    /**
-     * Searches for products by keyword and search type.
-     *
-     * @param k the keyword to search for
-     * @param t the search type (name or category)
-     * @return a ResponseEntity containing the list of products matching the search criteria
-     */
-    @GetMapping(value="/all/product/searching")
-    public ResponseEntity<List<Product>> searchProducts(@RequestParam("keyword") String k, @RequestParam("searchtype") String t) {
+    @GetMapping(value = "/all/product/searching")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam("keyword") String k,
+            @RequestParam("searchtype") String t) {
         String name = "name";
         String category = "category";
         List<Product> result;
@@ -59,22 +47,6 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
-    // /**
-    //  * Adds a new product. Only accessible by admin users.
-    //  *
-    //  * @param product the product to add
-    //  * @param result the binding result for validation
-    //  * @return a ResponseEntity containing a success or error message
-    //  */
-    // @PreAuthorize("hasRole('ADMIN')")
-    // @PostMapping(value = "/product/add")
-    // public ResponseEntity<String> addProduct(@Valid @RequestBody Product product, BindingResult result) {
-    //     if (result.hasErrors()) {
-    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Product Details");
-    //     }
-    //     return productService.createProduct(product) != null ? ResponseEntity.ok("Product Added Successfully") : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to Add Product");
-    // }
-
     @PostMapping("/add")
     public ResponseEntity<String> addProduct(@RequestPart Product product, @RequestPart("image") MultipartFile image) {
         try {
@@ -85,26 +57,15 @@ public class ProductController {
         }
     }
 
-    /**
-     * Displays all products.
-     *
-     * @return a ResponseEntity containing the list of all products
-     */
     @GetMapping("/all/products")
     public ResponseEntity<List<Product>> listAllProducts() {
-        return productService.getAllProducts().isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) : ResponseEntity.ok(productService.getAllProducts());
+        return productService.getAllProducts().isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+                : ResponseEntity.ok(productService.getAllProducts());
     }
 
-    /**
-     * Updates an existing product.
-     *
-     * @param id the ID of the product to update
-     * @param product the updated product details
-     * @param response the HTTP response
-     * @throws IOException if an I/O error occurs
-     */
     @PostMapping(value = "/update/{id}")
-    public void updateProduct(@PathVariable("id") Integer id, Product product, HttpServletResponse response) throws IOException {
+    public void updateProduct(@PathVariable("id") Integer id, Product product, HttpServletResponse response)
+            throws IOException {
         Product existingProduct = productService.findProductById(id);
         if (existingProduct != null) {
             existingProduct.setName(product.getName());
@@ -117,52 +78,31 @@ public class ProductController {
         response.sendRedirect("/all/products");
     }
 
-    /**
-     * Deletes a product by its ID.
-     *
-     * @param id the ID of the product to delete
-     * @param response the HTTP response
-     * @throws IOException if an I/O error occurs
-     */
     @DeleteMapping(value = "/delete/{id}")
     public void deleteProduct(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
         productService.deleteProduct(id);
         response.sendRedirect("/all/products");
     }
 
-    /**
-     * Searches for products by various filters.
-     *
-     * @param keyword the keyword to search for
-     * @param category the category to filter by
-     * @param minPrice the minimum price to filter by
-     * @param maxPrice the maximum price to filter by
-     * @return a ResponseEntity containing the list of products matching the filters
-     */
     @GetMapping(value = "/product/search")
-    public ResponseEntity<List<Product>> searchProducts(@RequestParam("keyword") String keyword, @RequestParam("category") String category,
-                                                        @RequestParam("minPrice") double minPrice, @RequestParam("maxPrice") double maxPrice) {
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam("keyword") String keyword,
+            @RequestParam("category") String category,
+            @RequestParam("minPrice") double minPrice, @RequestParam("maxPrice") double maxPrice) {
         List<Product> products = productService.searchProductsByFilters(keyword, category, minPrice, maxPrice);
-        return products.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) : ResponseEntity.ok(products);
+        return products.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+                : ResponseEntity.ok(products);
     }
 
-    /**
-     * Retrieves paginated and sorted products.
-     *
-     * @param pageNo the page number to retrieve
-     * @param sortField the field to sort by
-     * @param sortDirection the direction to sort (asc or desc)
-     * @return a ResponseEntity containing the list of paginated and sorted products
-     */
     @RequestMapping("/products/page/{pageNo}")
     public ResponseEntity<List<Product>> findPaginated(@PathVariable("pageNo") int pageNo,
-                                                       @RequestParam("sortField") String sortField,
-                                                       @RequestParam("sortDir") String sortDirection) {
+            @RequestParam("sortField") String sortField,
+            @RequestParam("sortDir") String sortDirection) {
         int pageSize = 5;
 
         Page<Product> page = productService.findPaginated(pageNo, pageSize, sortField, sortDirection);
         List<Product> products = page.getContent();
 
-        return products.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) : ResponseEntity.ok(products);
+        return products.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+                : ResponseEntity.ok(products);
     }
 }

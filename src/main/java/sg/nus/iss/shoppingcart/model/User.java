@@ -7,15 +7,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @ClassName User
- * @Description
- * @Author HUANG ZHENJIA
- * @StudentID A0298312B
- * @Date 2024/10/2
- * @Version 1.0
- */
-
 @Entity
 public class User {
     @Id
@@ -38,7 +29,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.USER;  // default role is user (customer)
+    private Role role = Role.USER;
 
     private String lastName;
 
@@ -47,16 +38,13 @@ public class User {
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // one to many
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CustomerOrder> orders = new ArrayList<>();
 
-    // one to one
     @OneToOne
-    @JoinColumn(name="cart_id", nullable = false)
+    @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    // one to many
     @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
 

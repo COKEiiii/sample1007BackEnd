@@ -18,31 +18,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
-/**
- * @ClassName PaymentImplementation
- * @Description Implementation of the PaymentInterface, providing services related to payment processing.
- */
 @Service
 public class PaymentImplementation implements PaymentInterface {
 
     private final PaymentRepository paymentRepository;
 
-    /**
-     * Constructor for PaymentImplementation.
-     *
-     * @param paymentRepository the repository for payments
-     */
     public PaymentImplementation(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
     }
 
-    /**
-     * Processes a payment for a given order.
-     *
-     * @param order the customer order
-     * @param paymentMethod the payment method
-     * @return true if the payment is successful, false otherwise
-     */
     @Override
     @Transactional
     public boolean makePayment(CustomerOrder order, PaymentMethods paymentMethod) {
@@ -63,11 +47,6 @@ public class PaymentImplementation implements PaymentInterface {
         }
     }
 
-    /**
-     * Simulates a payment process.
-     *
-     * @return true if the payment is successful, false otherwise
-     */
     @Override
     public boolean Pay() {
         boolean isSuccess = new Random().nextInt(100) < 80;
@@ -75,11 +54,6 @@ public class PaymentImplementation implements PaymentInterface {
         return isSuccess;
     }
 
-    /**
-     * Processes a refund for a given payment.
-     *
-     * @param payment the payment to refund
-     */
     @Override
     @Transactional
     public void Refund(Payment payment) {
@@ -92,13 +66,6 @@ public class PaymentImplementation implements PaymentInterface {
         }
     }
 
-    /**
-     * Generates a receipt for a given order and payment.
-     *
-     * @param order the customer order
-     * @param payment the payment
-     * @return a byte array representing the receipt PDF
-     */
     @Override
     public byte[] generateReceipt(CustomerOrder order, Payment payment) {
         try (PDDocument document = new PDDocument()) {
@@ -130,13 +97,6 @@ public class PaymentImplementation implements PaymentInterface {
         }
     }
 
-    /**
-     * Adds order information to the receipt.
-     *
-     * @param contentStream the content stream to write to
-     * @param order the customer order
-     * @throws IOException if an I/O error occurs
-     */
     private void addOrderInfo(PDPageContentStream contentStream, CustomerOrder order) throws IOException {
         contentStream.setFont(PDType1Font.HELVETICA, 12);
         contentStream.setNonStrokingColor(0, 0, 0);
@@ -149,18 +109,13 @@ public class PaymentImplementation implements PaymentInterface {
         contentStream.showText("Item Count: " + order.getOrderItems().size());
 
         for (OrderItem item : order.getOrderItems()) {
-            contentStream.showText("Item: " + item.getProduct().getName() + " | Price: " + item.getProduct().getPrice() + " | Quantity: " + item.getQuantity());
+            contentStream.showText("Item: " + item.getProduct().getName() + " | Price: " + item.getProduct().getPrice()
+                    + " | Quantity: " + item.getQuantity());
             contentStream.newLineAtOffset(0, -20);
         }
         contentStream.endText();
     }
 
-    /**
-     * Draws a separator line on the receipt.
-     *
-     * @param contentStream the content stream to write to
-     * @throws IOException if an I/O error occurs
-     */
     private void drawSeparator(PDPageContentStream contentStream) throws IOException {
         contentStream.setStrokingColor(0);
         contentStream.moveTo(50, 580);
@@ -168,13 +123,6 @@ public class PaymentImplementation implements PaymentInterface {
         contentStream.stroke();
     }
 
-    /**
-     * Adds payment information to the receipt.
-     *
-     * @param contentStream the content stream to write to
-     * @param payment the payment
-     * @throws IOException if an I/O error occurs
-     */
     private void addPaymentInfo(PDPageContentStream contentStream, Payment payment) throws IOException {
         contentStream.beginText();
         contentStream.newLineAtOffset(50, 560);
@@ -188,12 +136,6 @@ public class PaymentImplementation implements PaymentInterface {
         contentStream.endText();
     }
 
-    /**
-     * Finds a payment by its ID.
-     *
-     * @param paymentId the payment ID
-     * @return the found payment
-     */
     @Override
     @Transactional
     public Payment findByPaymentId(int paymentId) {

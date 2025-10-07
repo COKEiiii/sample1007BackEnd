@@ -18,37 +18,16 @@ import sg.nus.iss.shoppingcart.service.PaymentImplementation;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
-/**
- * @ClassName PaymentController
- * @Description
- * @Author V_E
- * @StudentID A0307246H
- * @Date 2024/10/5
- * @Version 3.0
- */
-
 @RestController
 @RequestMapping("/Payment")
 public class PaymentController {
 
     private final PaymentInterface paymentService;
 
-    /**
-     * Constructor for PaymentController.
-     *
-     * @param paymentService the service for processing payments
-     */
     public PaymentController(PaymentImplementation paymentService) {
         this.paymentService = paymentService;
     }
 
-    /**
-     * Endpoint to process a payment for a given customer order and payment method.
-     *
-     * @param orderAndMethod an object containing the customer order and payment method
-     * @return a ResponseEntity containing a boolean indicating the payment status, or an error status
-     */
     @PostMapping("/make-payment")
     public ResponseEntity<Boolean> makePayment(@RequestBody OrderAndPaymethod orderAndMethod) {
         try {
@@ -66,12 +45,6 @@ public class PaymentController {
         }
     }
 
-    /**
-     * Endpoint to generate a receipt for a given payment ID.
-     *
-     * @param paymentId the ID of the payment for which to generate the receipt
-     * @return a ResponseEntity containing the receipt PDF as a ByteArrayResource, or an error status
-     */
     @GetMapping("/generateReceipt/{paymentId}")
     public ResponseEntity<ByteArrayResource> generateReceipt(@PathVariable int paymentId) {
         try {
@@ -81,18 +54,14 @@ public class PaymentController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
 
-            //CustomerOrder order = payment.getOrder();
             CustomerOrder order = new CustomerOrder(
                     new User(),
                     payment,
                     OrderStatus.CANCELLED,
                     new BigDecimal(12),
-                    LocalDateTime.MAX
-            );
-
+                    LocalDateTime.MAX);
 
             byte[] pdfBytes = paymentService.generateReceipt(order, payment);
-
 
             if (pdfBytes == null || pdfBytes.length == 0) {
                 return ResponseEntity.noContent().build();
@@ -112,12 +81,6 @@ public class PaymentController {
         }
     }
 
-    /**
-     * Endpoint to process a refund for a given payment.
-     *
-     * @param paymentId the ID of the payment to be refunded
-     * @return a ResponseEntity with a success message or an error status
-     */
     @PostMapping("/refund-payment")
     public ResponseEntity<String> refundPayment(@RequestParam int paymentId) {
         try {

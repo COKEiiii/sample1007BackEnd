@@ -7,15 +7,6 @@ import org.springframework.validation.Validator;
 import sg.nus.iss.shoppingcart.model.CartItem;
 import sg.nus.iss.shoppingcart.model.Product;
 
-/**
- * @ClassName QuantityValidator
- * @Description
- * @Author YAO YIYANG
- * @StudentID A0294873L
- * @Date 2024/10/3
- * @Version 1.0
- */
-
 @Component
 public class QuantityValidator implements Validator {
 
@@ -39,4 +30,3 @@ public class QuantityValidator implements Validator {
         }
     }
 }
-

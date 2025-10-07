@@ -19,9 +19,6 @@ import sg.nus.iss.shoppingcart.service.PaymentImplementation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit tests for the PaymentController class.
- */
 @SpringBootTest
 @WebAppConfiguration
 class PaymentControllerTest {
@@ -32,10 +29,6 @@ class PaymentControllerTest {
     @InjectMocks
     private PaymentController paymentController;
 
-
-    /**
-     * Tests the happy path for making a payment.
-     */
     @Test
     void makePayment_HappyPath() {
         CustomerOrder order = new CustomerOrder();
@@ -49,9 +42,6 @@ class PaymentControllerTest {
         assertTrue(response.getBody());
     }
 
-    /**
-     * Tests making a payment with an invalid payment method.
-     */
     @Test
     void makePayment_InvalidPaymentMethod() {
         CustomerOrder order = new CustomerOrder();
@@ -63,9 +53,6 @@ class PaymentControllerTest {
         assertFalse(response.getBody());
     }
 
-    /**
-     * Tests making a payment when the service returns false.
-     */
     @Test
     void makePayment_ServiceReturnsFalse() {
         CustomerOrder order = new CustomerOrder();
@@ -79,15 +66,12 @@ class PaymentControllerTest {
         assertFalse(response.getBody());
     }
 
-    /**
-     * Tests generating a receipt for a valid payment.
-     */
     @Test
     void generateReceipt_HappyPath() {
         int paymentId = 1;
         Payment payment = new Payment();
         Mockito.when(paymentService.findByPaymentId(paymentId)).thenReturn(payment);
-        Mockito.when(paymentService.generateReceipt(Mockito.any(), Mockito.any())).thenReturn(new byte[]{1, 2, 3});
+        Mockito.when(paymentService.generateReceipt(Mockito.any(), Mockito.any())).thenReturn(new byte[] { 1, 2, 3 });
 
         ResponseEntity<ByteArrayResource> response = paymentController.generateReceipt(paymentId);
 
@@ -95,9 +79,6 @@ class PaymentControllerTest {
         assertNotNull(response.getBody());
     }
 
-    /**
-     * Tests generating a receipt when the payment is not found.
-     */
     @Test
     void generateReceipt_PaymentNotFound() {
         int paymentId = 1;
@@ -108,9 +89,6 @@ class PaymentControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-    /**
-     * Tests refunding a payment successfully.
-     */
     @Test
     void refundPayment_HappyPath() {
         int paymentId = 1;
@@ -123,9 +101,6 @@ class PaymentControllerTest {
         assertEquals("Payment refunded successfully", response.getBody());
     }
 
-    /**
-     * Tests refunding a payment when the payment is not found.
-     */
     @Test
     void refundPayment_PaymentNotFound() {
         int paymentId = 1;
