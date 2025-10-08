@@ -10,32 +10,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @ClassName CustomerOrderImplementation
- * @Description Implementation of the CustomerOrderInterface, providing services related to customer orders.
- */
 @Service
 public class CustomerOrderImplementation implements CustomerOrderInterface {
 
     private final CustomerOrderRepository orderRepository;
 
-    /**
-     * Constructor for CustomerOrderImplementation.
-     *
-     * @param orderRepository the repository for customer orders
-     */
     public CustomerOrderImplementation(CustomerOrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
-    /**
-     * Creates a new customer order.
-     *
-     * @param user the user placing the order
-     * @return the created customer order
-     * @throws IllegalArgumentException if the user or cart is null, or if the cart is empty
-     * @throws RuntimeException if there is an error creating the order
-     */
     @Transactional
     public CustomerOrder createOrder(User user) {
         try {
@@ -70,13 +53,6 @@ public class CustomerOrderImplementation implements CustomerOrderInterface {
         }
     }
 
-    /**
-     * Retrieves orders placed by a user.
-     *
-     * @param user the user whose orders are to be retrieved
-     * @return a list of customer orders
-     * @throws IllegalArgumentException if the user is null
-     */
     public List<CustomerOrder> getOrdersByUser(User user) {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
@@ -84,13 +60,6 @@ public class CustomerOrderImplementation implements CustomerOrderInterface {
         return user.getOrders();
     }
 
-    /**
-     * Retrieves a customer order by its ID.
-     *
-     * @param orderId the ID of the order to retrieve
-     * @return the customer order
-     * @throws RuntimeException if the order is not found or if there is an error retrieving the order
-     */
     public CustomerOrder getOrderById(Long orderId) {
         try {
             return orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
@@ -99,15 +68,6 @@ public class CustomerOrderImplementation implements CustomerOrderInterface {
         }
     }
 
-    /**
-     * Updates an existing customer order.
-     *
-     * @param orderId the ID of the order to update
-     * @param items the updated list of order items
-     * @return the updated customer order
-     * @throws IllegalArgumentException if the order items are null or empty
-     * @throws RuntimeException if there is an error updating the order
-     */
     @Transactional
     public CustomerOrder updateOrder(Long orderId, List<OrderItem> items) {
         try {
@@ -128,12 +88,6 @@ public class CustomerOrderImplementation implements CustomerOrderInterface {
         }
     }
 
-    /**
-     * Deletes a customer order by its ID.
-     *
-     * @param orderId the ID of the order to delete
-     * @throws RuntimeException if the order is not found or if there is an error deleting the order
-     */
     public void deleteOrder(Long orderId) {
         try {
             if (!orderRepository.existsById(orderId)) {

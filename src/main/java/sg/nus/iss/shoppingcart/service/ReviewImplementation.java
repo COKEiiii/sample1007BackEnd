@@ -9,30 +9,15 @@ import sg.nus.iss.shoppingcart.enums.ResponseStatus;
 
 import java.util.List;
 
-/**
- * @ClassName ReviewImplementation
- * @Description This class implements the ReviewInterface and handles the business logic related to user reviews.
- */
 @Service
 public class ReviewImplementation implements ReviewInterface {
 
     private final ReviewRepository reviewRepository;
 
-    /**
-     * Constructor for ReviewImplementation.
-     *
-     * @param reviewRepository the repository for reviews
-     */
     public ReviewImplementation(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
     }
 
-    /**
-     * Adds a review.
-     *
-     * @param review the review to be added
-     * @return a Response object containing the status and the added review
-     */
     @Override
     public Response<Review> addReview(Review review) {
         try {
@@ -43,12 +28,6 @@ public class ReviewImplementation implements ReviewInterface {
         }
     }
 
-    /**
-     * Retrieves reviews by product ID.
-     *
-     * @param productId the ID of the product
-     * @return a Response object containing the status and a list of reviews for the product
-     */
     @Override
     public Response<List<Review>> getReviewsByProduct(int productId) {
         try {
@@ -62,11 +41,6 @@ public class ReviewImplementation implements ReviewInterface {
         }
     }
 
-    /**
-     * Retrieves all reviews.
-     *
-     * @return a Response object containing the status and a list of all reviews
-     */
     @Override
     public Response<List<Review>> getAllReviews() {
         try {

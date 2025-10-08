@@ -22,17 +22,16 @@ public class Review {
 
     @Max(value = 5, message = "Rating must be less than 5")
     @Min(value = 1, message = "Rating must be at least 1")
-    private int rating; // Rating out of 5
+    private int rating;
 
     private String content;
 
-    //New field for image path
-    private String imagePath;     //Store image path
+    private String imagePath;
 
     public Review() {
     }
 
-    public Review(User user,Product product, int rating, String content) {
+    public Review(User user, Product product, int rating, String content) {
         this.user = user;
         this.product = product;
         this.rating = rating;
@@ -40,7 +39,6 @@ public class Review {
         this.imagePath = imagePath;
     }
 
-    // Getters and setters
     public int getReviewId() {
         return reviewId;
     }
@@ -48,6 +46,7 @@ public class Review {
     public void setReviewId(int reviewId) {
         this.reviewId = reviewId;
     }
+
     public User getUser() {
         return this.user;
     }
@@ -79,6 +78,7 @@ public class Review {
     public void setComment(String content) {
         this.content = content;
     }
+
     public String getImagePath() {
         return imagePath;
     }
@@ -97,5 +97,5 @@ public class Review {
                 ", content='" + content + '\'' +
                 ", imagePath='" + imagePath + '\'' +
                 '}';
-        }
     }
+}

@@ -10,62 +10,52 @@ import java.util.List;
 
 import static sg.nus.iss.shoppingcart.enums.ProductStatus.AVAILABLE;
 
-/**
- * @ClassName Product
- * @Description
- * @Author YAO YIYANG
- * @StudentID A0294873L
- * @Date 2024/10/2
- * @Version 1.0
- */
-
 @Entity
 @Table(name = "products")
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ProductId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int ProductId;
 
-    @Column(nullable = false)
-    private String name;
+	@Column(nullable = false)
+	private String name;
 
-    private String description;
-    
-    @Column(nullable = false)
-    private double price;
+	private String description;
 
-	@Min(
-			value = 0,
-			message = "Stock must be at least 0"
-	)
-    @Column(nullable = false)
-    private int stock;
+	@Column(nullable = false)
+	private double price;
+
+	@Min(value = 0, message = "Stock must be at least 0")
+	@Column(nullable = false)
+	private int stock;
 
 	@Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ProductStatus status;
+	@Column(nullable = false)
+	private ProductStatus status;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime createdAt = LocalDateTime.now();
 
 	private String imageUrl;
-    
-    @ManyToOne
-    @JoinColumn(name="category_id", nullable = false)
-    private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Review> reviews = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "category_id", nullable = false)
+	private Category category;
 
-    public Product() {}
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	private List<Review> reviews = new ArrayList<>();
 
-    public Product(String name, String description, double price, int stock, ProductStatus productStatus,String imageUrl) {
-        this.setName(name);
-        this.setDescription(description);
-        this.setPrice(price);
-        this.setStock(stock);
-        this.setStatus(productStatus);
+	public Product() {
+	}
+
+	public Product(String name, String description, double price, int stock, ProductStatus productStatus,
+			String imageUrl) {
+		this.setName(name);
+		this.setDescription(description);
+		this.setPrice(price);
+		this.setStock(stock);
+		this.setStatus(productStatus);
 		this.setImageUrl(imageUrl);
-    }
+	}
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
@@ -146,9 +136,10 @@ public class Product {
 	public void setReview(Review review) {
 		this.reviews.add(review);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Product [id="+ProductId+", name="+name+", description="+description+", price="+price+", stock="+stock+", status="+status+"]";
+		return "Product [id=" + ProductId + ", name=" + name + ", description=" + description + ", price=" + price
+				+ ", stock=" + stock + ", status=" + status + "]";
 	}
 }

@@ -39,7 +39,6 @@ public class UserControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // Test case for normal user registration
     @Test
     public void testRegisterUser_HappyPath() {
         User user = new User();
@@ -53,7 +52,6 @@ public class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    // Test case for exception during user registration
     @Test
     public void testRegisterUser_Exception() {
         User user = new User();
@@ -65,7 +63,6 @@ public class UserControllerTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
-    // Test case for normal user login
     @Test
     public void testLoginUser_HappyPath() {
         User user = new User();
@@ -80,25 +77,24 @@ public class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    // Test case for exception during login
     @Test
     public void testLoginUser_Exception() {
         User user = new User();
         HttpSession mockSession = new MockHttpSession();
-        when(userInterface.loginUser(user.getUsername(), user.getPassword())).thenThrow(new RuntimeException("Login failed"));
-        ResponseEntity<Response<UserDTO>> response = userController.loginUser(user,mockSession);
+        when(userInterface.loginUser(user.getUsername(), user.getPassword()))
+                .thenThrow(new RuntimeException("Login failed"));
+        ResponseEntity<Response<UserDTO>> response = userController.loginUser(user, mockSession);
 
         assertEquals(500, response.getStatusCodeValue());
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
-    // Test case for normal user profile retrieval
     @Test
     public void testDisplayUser_HappyPath() {
         Long userId = 1L;
         User user = new User();
-        Response<User> expectedResponse = new Response<>(ResponseStatus
-                .SUCCESS, "User information retrieved successfully", user);
+        Response<User> expectedResponse = new Response<>(ResponseStatus.SUCCESS,
+                "User information retrieved successfully", user);
 
         when(userInterface.getUserProfile(userId)).thenReturn(expectedResponse);
         ResponseEntity<Response<User>> response = userController.displayUser(userId);
@@ -107,7 +103,6 @@ public class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    // Test case for exception during user profile retrieval
     @Test
     public void testDisplayUser_Exception() {
         Long userId = 1L;
@@ -119,12 +114,12 @@ public class UserControllerTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
-    // Test case for normal user search
     @Test
     public void testSearchUserByKeyword_HappyPath() {
         String keyword = "test";
         User user = new User();
-        Response<List<User>> expectedResponse = new Response<>(ResponseStatus.SUCCESS, "Search successful", Collections.singletonList(user));
+        Response<List<User>> expectedResponse = new Response<>(ResponseStatus.SUCCESS, "Search successful",
+                Collections.singletonList(user));
 
         when(userInterface.searchUserByKeyword(keyword)).thenReturn(expectedResponse);
         ResponseEntity<Response<List<User>>> response = userController.searchUserByKeyword(keyword);
@@ -133,14 +128,13 @@ public class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    // Test case for exception during user search
     @Test
     public void testSearchUserByKeyword_Exception() {
         String keyword = "test";
 
         when(userInterface.searchUserByKeyword(keyword)).thenThrow(new RuntimeException("Search failed"));
         ResponseEntity<Response<List<User>>> response = userController.searchUserByKeyword(keyword);
-        
+
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 }

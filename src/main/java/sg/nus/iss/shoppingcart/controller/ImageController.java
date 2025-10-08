@@ -15,15 +15,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/**
- * @ClassName ImageController
- * @Description
- * @Author HUANG ZHENJIA
- * @StudentID A0298312B
- * @Date 2024/10/9
- * @Version 1.0
- */
-
 @RestController
 @RequestMapping("/uploads")
 public class ImageController {
@@ -33,7 +24,6 @@ public class ImageController {
     @GetMapping("/images/{timestamp}/{filename:.+}")
     public ResponseEntity<Resource> serveFile(@PathVariable String timestamp, @PathVariable String filename) {
         try {
-            // 确保路径安全
             Path file = Paths.get(uploadDir + timestamp).resolve(filename).normalize();
 
             Resource resource = new UrlResource(file.toUri());
@@ -52,5 +42,3 @@ public class ImageController {
         }
     }
 }
-
-

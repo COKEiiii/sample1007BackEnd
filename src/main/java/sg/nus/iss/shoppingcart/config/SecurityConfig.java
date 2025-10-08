@@ -23,25 +23,21 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(
-                                // 用户认证相关
                                 "/users/register",
                                 "/users/login",
                                 "/users/session",
                                 "/users/logout",
                                 "/api/users/register",
                                 "/api/users/login",
-                                // 产品相关 - 允许小写和大写路径
                                 "/api/products/**",
-                                "/product/**",   // 小写路径
-                                "/Product/**",   // 添加大写路径以匹配后端端点
-                                // 其他
+                                "/product/**",
+                                "/Product/**",
                                 "/api/categories/**",
                                 "/images/**",
                                 "/css/**",
-                                "/js/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
-                );
+                                "/js/**")
+                        .permitAll()
+                        .anyRequest().authenticated());
         return http.build();
     }
 
