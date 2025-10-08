@@ -5,16 +5,6 @@ import jakarta.validation.constraints.Min;
 
 import java.math.BigDecimal;
 
-/**
- * @ClassName OrderItem
- * @Description This class represents an order in the shopping cart system.
- * @Param orderItemId, order, product, quantity, subtotal
- * @Author Chang Wang
- * @StudentID A0310544R
- * @Date 2024/10/2
- * @Version 1.0
- */
-
 @Entity
 public class OrderItem {
     @Id
@@ -32,31 +22,23 @@ public class OrderItem {
     private Product product;
 
     @Column(nullable = false)
-    @Min(
-            value = 1,
-            message = "Quantity must be at least 1"
-    )
+    @Min(value = 1, message = "Quantity must be at least 1")
     private Integer quantity;
 
     @Column(nullable = false)
-    @Min(
-            value = 1,
-            message = "Subtotal must be at least 1"
-    )
+    @Min(value = 1, message = "Subtotal must be at least 1")
     private double subtotal;
 
-    //  Default Constructor
     public OrderItem() {
     }
 
-    // Constructor with parameters
     public OrderItem(CustomerOrder order, Product product, Integer quantity) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;
         this.subtotal = product.getPrice() * quantity;
     }
-    // Getters and Setters
+
     public Integer getOrderItemId() {
         return orderItemId;
     }
@@ -105,6 +87,7 @@ public class OrderItem {
         this.itemName = product.getName();
         return product.getName();
     }
+
     public void setOrderItemName(String itemName) {
         this.itemName = itemName;
     }

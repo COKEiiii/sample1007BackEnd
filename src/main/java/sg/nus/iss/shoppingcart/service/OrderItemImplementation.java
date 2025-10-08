@@ -8,34 +8,15 @@ import sg.nus.iss.shoppingcart.model.OrderItem;
 
 import java.util.List;
 
-/**
- * @ClassName OrderItemImplementation
- * @Description This class is used to implement the OrderItemInterface
- * @Author Chang Wang
- * @StudentID A0310544R
- * @Date 2024/10/5
- * @Version 1.0
- */
 @Service
 public class OrderItemImplementation implements OrderItemInterface {
 
     private final OrderItemRepository orderItemRepository;
 
-    /**
-     * Constructor for OrderItemImplementation.
-     *
-     * @param orderItemRepository the repository for order items
-     */
     public OrderItemImplementation(OrderItemRepository orderItemRepository) {
         this.orderItemRepository = orderItemRepository;
     }
 
-    /**
-     * Adds a new order item.
-     *
-     * @param orderItem the order item to be added
-     * @return the added OrderItem
-     */
     @Transactional
     public OrderItem addOrderItem(OrderItem orderItem) {
         if (orderItem == null) {
@@ -44,13 +25,6 @@ public class OrderItemImplementation implements OrderItemInterface {
         return orderItemRepository.save(orderItem);
     }
 
-    /**
-     * Updates an existing order item.
-     *
-     * @param itemId the ID of the order item to be updated
-     * @param updatedItem the updated order item
-     * @return the updated OrderItem
-     */
     @Transactional
     public OrderItem updateOrderItem(Long itemId, OrderItem updatedItem) {
         if (updatedItem == null) {
@@ -66,11 +40,6 @@ public class OrderItemImplementation implements OrderItemInterface {
         return orderItemRepository.save(existingItem);
     }
 
-    /**
-     * Deletes an order item by its ID.
-     *
-     * @param itemId the ID of the order item to be deleted
-     */
     @Transactional
     public void deleteOrderItem(Long itemId) {
         if (!orderItemRepository.existsById(itemId)) {
@@ -79,12 +48,6 @@ public class OrderItemImplementation implements OrderItemInterface {
         orderItemRepository.deleteById(itemId);
     }
 
-    /**
-     * Retrieves order items by order ID.
-     *
-     * @param orderId the ID of the order
-     * @return a list of OrderItem for the given order ID
-     */
     public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
         return orderItemRepository.findAllByOrderId(orderId);
     }

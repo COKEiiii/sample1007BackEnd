@@ -40,10 +40,9 @@ class ReviewControllerTest {
         reviewController = new ReviewController(reviewInterface);
     }
 
-    // Test the happy path for adding a review
     @Test
     void testAddReview_HappyPath() {
-        Review review = new Review(); // Assume the Review object is initialized
+        Review review = new Review();
         Response<Review> response = new Response<>(ResponseStatus.SUCCESS, "Review added successfully", review);
         when(reviewInterface.addReview(any())).thenReturn(response);
 
@@ -53,10 +52,9 @@ class ReviewControllerTest {
         assertEquals("Review added successfully", result.getBody().getMessage());
     }
 
-    // Test exception scenario when adding a review
     @Test
     void testAddReview_Exception() {
-        Review review = new Review(); // Assume the Review object is initialized
+        Review review = new Review();
         when(reviewInterface.addReview(any())).thenThrow(new RuntimeException("Server error"));
 
         ResponseEntity<Response<Review>> result = reviewController.addReview(review);
@@ -65,12 +63,12 @@ class ReviewControllerTest {
         assertTrue(result.getBody().getMessage().contains("Failed to add review"));
     }
 
-    // Test the happy path for getting reviews by product
     @Test
     void testGetReviewsByProduct_HappyPath() {
         int productId = 1;
-        Review review = new Review(); // Assume the Review object is initialized
-        Response<List<Review>> response = new Response<>(ResponseStatus.SUCCESS, "Fetch successful", Arrays.asList(review));
+        Review review = new Review();
+        Response<List<Review>> response = new Response<>(ResponseStatus.SUCCESS, "Fetch successful",
+                Arrays.asList(review));
         when(reviewInterface.getReviewsByProduct(productId)).thenReturn(response);
 
         ResponseEntity<Response<List<Review>>> result = reviewController.getReviewsByProduct(productId);
@@ -79,7 +77,6 @@ class ReviewControllerTest {
         assertEquals("Fetch successful", result.getBody().getMessage());
     }
 
-    // Test exception scenario when getting reviews by product
     @Test
     void testGetReviewsByProduct_Exception() {
         int productId = 1;
@@ -91,11 +88,11 @@ class ReviewControllerTest {
         assertTrue(result.getBody().getMessage().contains("Failed to fetch reviews"));
     }
 
-    // Test the happy path for getting all reviews
     @Test
     void testGetAllReviews_HappyPath() {
-        Review review = new Review(); // Assume the Review object is initialized
-        Response<List<Review>> response = new Response<>(ResponseStatus.SUCCESS, "Successfully fetched all reviews", Arrays.asList(review));
+        Review review = new Review();
+        Response<List<Review>> response = new Response<>(ResponseStatus.SUCCESS, "Successfully fetched all reviews",
+                Arrays.asList(review));
         when(reviewInterface.getAllReviews()).thenReturn(response);
 
         ResponseEntity<Response<List<Review>>> result = reviewController.getAllReviews();
@@ -104,7 +101,6 @@ class ReviewControllerTest {
         assertEquals("Successfully fetched all reviews", result.getBody().getMessage());
     }
 
-    // Test exception scenario when getting all reviews
     @Test
     void testGetAllReviews_Exception() {
         when(reviewInterface.getAllReviews()).thenThrow(new RuntimeException("Server error"));

@@ -15,14 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * @ClassName CartImplementation
- * @Description Implementation of the CartInterface, providing services related to the shopping cart.
- * @Author YAO YIYANG
- * @StudentID A0294873L
- * @Date 2024/10/3
- * @Version 1.0
- */
 @Service
 @Transactional
 public class CartImplementation implements CartInterface {
@@ -30,12 +22,6 @@ public class CartImplementation implements CartInterface {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
 
-    /**
-     * Constructor for CartImplementation.
-     *
-     * @param cartItemRepository the repository for cart items
-     * @param productRepository the repository for products
-     */
     public CartImplementation(CartItemRepository cartItemRepository, ProductRepository productRepository) {
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
@@ -52,7 +38,7 @@ public class CartImplementation implements CartInterface {
         try {
             return productRepository.findAll();
         } catch (Exception e) {
-            return new ArrayList<>(); // Return an empty list
+            return new ArrayList<>();
         }
     }
 
@@ -62,7 +48,7 @@ public class CartImplementation implements CartInterface {
         try {
             return productRepository.SearchAvailableProductByName(name);
         } catch (Exception e) {
-            return new ArrayList<>(); // Return an empty list
+            return new ArrayList<>();
         }
     }
 
@@ -72,7 +58,7 @@ public class CartImplementation implements CartInterface {
         try {
             return productRepository.findById(id).orElse(null);
         } catch (Exception e) {
-            return null; // Return null to indicate the product was not found
+            return null;
         }
     }
 
@@ -82,15 +68,15 @@ public class CartImplementation implements CartInterface {
         try {
             Product product = findProductById(productId);
             if (product == null || quantity <= 0) {
-                return false; // Handle error for invalid product or quantity
+                return false;
             }
             CartItem cartItem = new CartItem();
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
             cartItemRepository.save(cartItem);
-            return true; // Return true to indicate success
+            return true;
         } catch (Exception e) {
-            return false; // Indicate failure
+            return false;
         }
     }
 
@@ -100,7 +86,7 @@ public class CartImplementation implements CartInterface {
         try {
             return cartItemRepository.findAll().stream().map(CartItemMapper::toCartItemDTO).toList();
         } catch (Exception e) {
-            return new ArrayList<>(); // Return an empty list
+            return new ArrayList<>();
         }
     }
 
@@ -110,7 +96,7 @@ public class CartImplementation implements CartInterface {
         try {
             return cartItemRepository.SearchCartItemByName(name).stream().map(CartItemMapper::toCartItemDTO).toList();
         } catch (Exception e) {
-            return new ArrayList<>(); // Return an empty list
+            return new ArrayList<>();
         }
     }
 
@@ -120,7 +106,7 @@ public class CartImplementation implements CartInterface {
         try {
             return CartItemMapper.toCartItemDTO(Objects.requireNonNull(cartItemRepository.findById(id).orElse(null)));
         } catch (Exception e) {
-            return null; // Return null to indicate the cart item was not found
+            return null;
         }
     }
 
@@ -129,15 +115,15 @@ public class CartImplementation implements CartInterface {
     public boolean deleteCartItemById(Integer id) {
         try {
             if (id == null) {
-                return false; // Return false for null ID
+                return false;
             }
             if (cartItemRepository.existsById(id)) {
                 cartItemRepository.deleteById(id);
-                return true; // Indicate success
+                return true;
             }
-            return false; // Indicate that the ID does not exist
+            return false;
         } catch (Exception e) {
-            return false; // Indicate failure
+            return false;
         }
     }
 
@@ -145,7 +131,7 @@ public class CartImplementation implements CartInterface {
     @Transactional
     public boolean deleteCartItemsByIds(List<Integer> cartItemIds) {
         if (cartItemIds == null || cartItemIds.isEmpty()) {
-            return false; // Handle empty or null list
+            return false;
         }
         boolean allDeleted = true;
         for (Integer id : cartItemIds) {
@@ -161,12 +147,12 @@ public class CartImplementation implements CartInterface {
     public boolean saveCartItem(CartItem cartItem) {
         try {
             if (cartItem == null) {
-                return false; // Handle error for null cart item
+                return false;
             }
             cartItemRepository.save(cartItem);
-            return true; // Indicate success
+            return true;
         } catch (Exception e) {
-            return false; // Indicate failure
+            return false;
         }
     }
 }
