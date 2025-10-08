@@ -1,13 +1,11 @@
 package sg.nus.iss.shoppingcart.controller;
 
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
 import jakarta.validation.Valid;
 import sg.nus.iss.shoppingcart.interfacemethods.CartInterface;
 import sg.nus.iss.shoppingcart.model.CartItem;
@@ -16,24 +14,21 @@ import sg.nus.iss.shoppingcart.model.Product;
 import sg.nus.iss.shoppingcart.service.CartImplementation;
 import sg.nus.iss.shoppingcart.validator.QuantityValidator;
 
-import jakarta.servlet.http.HttpSession;
-
 @RestController
 public class CartController {
-
     private final CartInterface CartService;
     private final QuantityValidator quantityValidator;
-
+    
     public CartController(CartImplementation cartServiceImpl, QuantityValidator quantityValidator) {
         this.CartService = cartServiceImpl;
         this.quantityValidator = quantityValidator;
     }
-
+    
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.addValidators(quantityValidator);
     }
-
+    
     @GetMapping("/Product")
     public ResponseEntity<List<Product>> getProductSearchPage() {
         try {
@@ -43,7 +38,7 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
+    
     @GetMapping(value = "/Product/searching")
     public ResponseEntity<List<Product>> searchProduct(@RequestParam("keyword") String k) {
         try {
@@ -54,7 +49,7 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
+    
     @GetMapping(value = "/Product/details/{id}")
     public ResponseEntity<Product> displayProduct(@PathVariable("id") Integer id) {
         try {
@@ -64,7 +59,7 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
+    
     @PostMapping(value = "/Product/addCartItem")
     public ResponseEntity<String> addProductToCart(@RequestParam("productId") Integer productId,
             @RequestParam("quantity") Integer quantity) {
@@ -76,8 +71,8 @@ public class CartController {
                     .body("Unable to add product to cart: " + e.getMessage());
         }
     }
-
-    @PostMapping("/CartItem")
+    
+    @GetMapping("/CartItem")
     public ResponseEntity<List<CartItemDTO>> getCartItemSearchPage() {
         try {
             return CartService.findAllCartItems().isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
@@ -86,7 +81,7 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
+    
     @GetMapping(value = "/CartItem/searching")
     public ResponseEntity<List<CartItemDTO>> searchCartItem(@RequestParam("keyword") String k) {
         try {
@@ -97,7 +92,7 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
+    
     @GetMapping(value = "/CartItem/details/{id}")
     public ResponseEntity<CartItemDTO> displayCartItem(@PathVariable("id") Integer id) {
         try {
@@ -107,7 +102,7 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
+    
     @DeleteMapping(value = "/CartItem/delete/{id}")
     public ResponseEntity<String> deleteCartItem(@PathVariable("id") Integer id) {
         try {
@@ -119,7 +114,7 @@ public class CartController {
                     .body("Unable to delete CartItem: " + e.getMessage());
         }
     }
-
+    
     @PostMapping("/CartItem/deleteBatch")
     public ResponseEntity<String> deleteCartItems(@RequestParam("cartItemIds") List<Integer> cartItemIds) {
         try {
@@ -131,7 +126,7 @@ public class CartController {
                     .body("Unable to delete CartItems: " + e.getMessage());
         }
     }
-
+    
     @PostMapping("/CartItem/updateQuantity")
     public ResponseEntity<String> updateCartItemQuantity(@Valid @RequestBody CartItem cartItem, BindingResult result) {
         if (result.hasErrors()) {
