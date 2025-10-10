@@ -45,6 +45,12 @@ public class PaymentController {
         }
     }
 
+    /**
+     * Endpoint to generate a receipt for a given payment ID.
+     *
+     * @param paymentId the ID of the payment for which to generate the receipt
+     * @return a ResponseEntity containing the receipt PDF as a ByteArrayResource, or an error status
+     */
     @GetMapping("/generateReceipt/{paymentId}")
     public ResponseEntity<ByteArrayResource> generateReceipt(@PathVariable int paymentId) {
         try {
@@ -54,14 +60,18 @@ public class PaymentController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
 
+            //CustomerOrder order = payment.getOrder();
             CustomerOrder order = new CustomerOrder(
                     new User(),
                     payment,
                     OrderStatus.CANCELLED,
                     new BigDecimal(12),
-                    LocalDateTime.MAX);
+                    LocalDateTime.MAX
+            );
+
 
             byte[] pdfBytes = paymentService.generateReceipt(order, payment);
+
 
             if (pdfBytes == null || pdfBytes.length == 0) {
                 return ResponseEntity.noContent().build();
@@ -81,6 +91,12 @@ public class PaymentController {
         }
     }
 
+    /**
+     * Endpoint to process a refund for a given payment.
+     *
+     * @param paymentId the ID of the payment to be refunded
+     * @return a ResponseEntity with a success message or an error status
+     */
     @PostMapping("/refund-payment")
     public ResponseEntity<String> refundPayment(@RequestParam int paymentId) {
         try {

@@ -6,7 +6,10 @@ import sg.nus.iss.shoppingcart.enums.Role;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.Collection;
+import java.util.Collections;
 @Entity
 public class User {
     @Id
@@ -35,6 +38,7 @@ public class User {
 
     private String firstName;
 
+
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 
@@ -48,6 +52,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
 
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // 拼接"ROLE_"前缀（Spring Security默认要求角色权限以此前缀开头）
+        // 例如：当role为USER时，权限为"ROLE_USER"
+        return Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + this.role.name())
+        );
+    }
     public User() {
     }
 
