@@ -17,8 +17,9 @@ import sg.nus.iss.shoppingcart.model.DTO.UserDTO;
 import sg.nus.iss.shoppingcart.model.User;
 import sg.nus.iss.shoppingcart.utils.Response;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -82,14 +83,21 @@ public class UserController {
                     .body(new Response<>(ResponseStatus.INTERNAL_SERVER_ERROR, "Failed Login：" + e.getMessage(), null));
         }
     }
+
     @GetMapping("/session")
-    public ResponseEntity<Response<UserDTO>> getSessionUser(HttpSession session) {
+    public ResponseEntity<Response<Map<String, Object>>> getSessionUser(HttpSession session) {
         UserDTO sessionUser = (UserDTO) session.getAttribute("user");
+        Map<String, Object> responseData = new HashMap<>();
+
         if (sessionUser != null) {
-            return ResponseEntity.ok(new Response<>(ResponseStatus.SUCCESS, "User is logged in", sessionUser));
+            responseData.put("isLoggedIn", true);
+            responseData.put("user", sessionUser);
+            return ResponseEntity.ok(new Response<>(ResponseStatus.SUCCESS, "User is logged in", responseData));
         } else {
-            return ResponseEntity.status(401)
-                    .body(new Response<>(ResponseStatus.UNAUTHORIZED, "No user session found", null));
+            responseData.put("isLoggedIn", false);
+            responseData.put("user", null);
+            // 返回200而不是401，让前端处理登录状态
+            return ResponseEntity.ok(new Response<>(ResponseStatus.SUCCESS, "No user session found", responseData));
         }
     }
 
