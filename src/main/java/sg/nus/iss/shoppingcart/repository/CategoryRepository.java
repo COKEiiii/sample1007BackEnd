@@ -7,7 +7,9 @@ import sg.nus.iss.shoppingcart.model.Category;
 import sg.nus.iss.shoppingcart.model.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+    Optional<Category> findByName(String name);
 }
